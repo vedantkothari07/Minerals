@@ -1,5 +1,5 @@
 # Vedant Kothari
-# K^3
+# K^3 (Vedant Kothari, Suhana Kumar, Kyle Lee)
 # SoftDev
 # Learn more about dictionaries and random selection
 # <2024>-<09>-<13>
