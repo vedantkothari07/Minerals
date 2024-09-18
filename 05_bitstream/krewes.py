@@ -17,6 +17,5 @@ for tuple in tuples:
 if devos:
     random_devo = random.choice(devos)
     print(f"Devo: {random_devo['devo']}, Period: {random_devo['period']}, Ducky: {random_devo['ducky']}")
-else:
-        print("No devos found.")
+
         
