@@ -60,6 +60,7 @@ with open('occupations.csv', newline='') as csvfile: # opens the csv file
     if (num >= 934 and num <= 998):
         print(occupations_dict[columns[0]][21])
     
+# More efficient way to do it: make a for loop that subtracts the percent of each job class from the random number until the result is negative
 
         
         
