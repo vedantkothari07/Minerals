@@ -1,3 +1,8 @@
+# Vedant Kothari
+# K^3 (Suhana Kumar, Vedant Kothari, Kyle Lee)
+# Printing random occupation to web
+# .75
+# <2024><09><25>
 import csv
 import random
 from flask import Flask
