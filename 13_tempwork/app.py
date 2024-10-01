@@ -1,65 +1,45 @@
 # Vedant Kothari
-# K^3 (Suhana Kumar, Vedant Kothari, Kyle Lee)
-# Printing random occupation to web
-# .75
-# <2024><09><25>
-import csv
+# Minerals FC - Vedant Kothari, Benjamin Rudinski, Endrit Idrizi
+# SoftDev
+# K13: CSV file parsing, flask, displaying to HTML as a table with links
+# 2024-9-30
+# Time Spent: 1.5 Hours
+
 import random
-from flask import Flask
+import csv
+from flask import Flask, render_template
+
 app = Flask(__name__)
 
-@app.route("/")
-def occupation():
-    with open('occupations.csv', 'r') as csvFile:
-        csv_reader = csv.reader(csvFile)
-        info = {}
-        count = 0
-        rando_number = random.randint(0, 998)
-        total = 0
+# read csv and return dictionary with job data
+def readfile(f):
+    d = {}
+    with open(f, 'r') as listfile:
+        reader = csv.DictReader(listfile)
+        for row in reader:
+            job = row['Job Class']
+            if job == "Total":
+                continue # skip total
+            percent = float(row['Percentage'])
+            link = row['Link'] # read links as well{'percentage': percent, 'link': link}
+            d[job] = {'percentage': percent, 'link': link}
+    return d        
+            
+# randomly select occupation based on weighted chance
+def sel(d):
+    return random.choices(list(d.keys()), weights=[v['percentage'] for v in d.values()], k=1)[0]
 
-        for lines in csv_reader:
-            if count == 0:
-                count += 1  # Skip the first row with headers
-                continue
-
-            if total > rando_number:
-                return lines[0]  # Return selected occupation based on random number
-
-            total += float(lines[1]) * 10  # Update cumulative total
-            info[lines[0]] = float(lines[1])  # Populate occupation dictionary
-            count += 1
-
-        return "Error: Could not select an occupation."  # Default if no occupation found
-
-@app.route("/printall")
-def printall():
-    with open('occupations.csv', newline='') as csvfile:
-        reader = csv.reader(csvfile)
-        occupations = [row for row in reader]
-
-    selected_occupation = random.choice(occupations)
-
-    info = """
-    <!DOCTYPE html>
-    <html>
-    <body>
-        <p>K^3: Suhana Kumar, Vedant Kothari, Kyle Lee</p>
-        <h2>This time: {}</h2>
-        <h3>Occupations</h3>
-        <ul>
-    """.format(selected_occupation[0])
-
-    for row in occupations:
-        info += "<li>{}: {}</li>".format(row[0], row[1])
-
-    info += """
-        </ul>
-    </body>
-    </html>
-    """
-
-    return info
-
-
-if __name__ == '__main__':
+@app.route("/wdywtbwygp")
+def page():
+    occupations = readfile("data/occupations.csv")
+    random_job = sel(occupations)
+    return render_template(
+        "tablified.html",
+        tnpg_roster="Minerals FC - Endrit, Ben, Vedant",
+        occupations=occupations,
+        random_job=random_job
+    )
+    
+if __name__ == "__main__":
+    app.debug = True # comment out later
     app.run()
