@@ -67,7 +67,7 @@ OTHER?
 stored using RAM (maybe), so maybe PyCache is python's cache??
 * Request module is used for form submission.
 * Can I have multiple functions with an app.route('/'). I've always
-been curious whether or not this was possible :crying_face_emoji:
+been curious whether or not this was possible
 -----------------------------------------------------------------------
 
 
