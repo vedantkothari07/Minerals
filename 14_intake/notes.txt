@@ -6,6 +6,7 @@ K14 -- Intake
 time spent: 0.5 hrs
 
 DISCO:
+* At first, the auth page was unable to load because there was no existing username in args. In order for the function with route 'auth' to run, it has to have a username in order to print "Waaaa hooo HAAAH"
 * First, we uncommented all of the tags to see which part of the code
 would throw an error. In doing so, a BadRequestKeyError is thrown
 stating that 'username' isn't a key.
