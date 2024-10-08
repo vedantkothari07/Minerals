@@ -1,27 +1,74 @@
-< your heading here >
+Vedant Kothari
+Albania - Vedant Kothari, Endrit Idrizi, Suhana Kumar
+SoftDev
+K14 -- Intake
+2024-10-8
+time spent: 0.5 hrs
 
 DISCO:
-* 
-* 
-* 
+* First, we uncommented all of the tags to see which part of the code
+would throw an error. In doing so, a BadRequestKeyError is thrown
+stating that 'username' isn't a key.
+* This would suggest that args is a dictionary of request and 'username'
+is not a valid key in args.
+* We also found out that uncommenting this single line was the issue for 
+both functions, supporting our theories on the first discovery.
+* ONLY when you submit an username does the line actually work, thus meaning
+that the input was added to the args dictionary and thus produces a value for
+the key.
+* In HTML the tag form is used with action="/auth" to push the route to
+/auth after hitting submit on the home page.
+* "auth?username=sdadsa&sub1=Submit" -> the hyperlink changed to that
+when we typed in a username, "sdadsa". I think this represents a logic line,
+where if auth is validated, username should have a value and sub1 should
+equal Submit.
 -----------------------------------------------------------------------
 
 
 Q/C/C:
-* "import testmod0" imports code from testmod0.py
-* 
-* 
+* We weren't really sure what "#, methods=['GET', 'POST'])" meant as we tried
+uncommenting it to no avail. It just created a new error saying that
+it needed to be after a decorator.
+* The text below was prompted after I uncommented only the auth route function without 
+the error. I did my best to cross-correlate with each method. 
+
+" ***DIAG: this Flask obj ***
+<Flask 'app'> <- "print(app)
+***DIAG: request obj ***
+<Request 'http://127.0.0.1:5000/auth?username=BLAH&sub1=Submit' [GET]> <- print(request)
+***DIAG: request.args ***
+ImmutableMultiDict([('username', 'BLAH'), ('sub1', 'Submit')]) <- print(request.args)
+***DIAG: request.args['username']  ***
+BLAH <- print(request.args['username'])
+***DIAG: request.headers ***
+Host: 127.0.0.1:5000 <- print(request.headers)
+Connection: keep-alive
+Sec-Ch-Ua: "Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "macOS"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: http://127.0.0.1:5000/
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: en-US,en;q=0.9 "
+
+* How is this information useful to us as developers? It just seems like
+blurry scrambled words and techy stuff at this point.
 -----------------------------------------------------------------------
 
 
 OTHER?
-* 
-* 
-* 
+* What is PyCache? I think cache is like the data that is temporarily 
+stored using RAM (maybe), so maybe PyCache is python's cache??
+* Request module is used for form submission.
+* Can I have multiple functions with an app.route('/'). I've always
+been curious whether or not this was possible :crying_face_emoji:
 -----------------------------------------------------------------------
-
-
-
 
 
 
