@@ -1,6 +1,9 @@
-# Clyde 'Thluffy' Sinclair
+# Vedant Kothari
+# K^3 - Vedant Kothari, Kyle Lee, Suhana Kumar
 # SoftDev
-# October 2024
+# K14 -- Intake
+# 2024-10-8
+# time spent: 0.5 hrs
 
 # import conventions:
 # list most general first (standard python library)
