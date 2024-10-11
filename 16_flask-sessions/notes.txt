@@ -1,0 +1,6 @@
+'''
+Kyle Lee, Vedant Kothari, Suhana Kumar
+Team Name: K^3
+K16 - Flask Sessions
+2024-10-10
+'''
