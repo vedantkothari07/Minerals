@@ -2,18 +2,18 @@
 """
 
 '''
-Endrit Idrizi, Vedant Kothari, Suhana Kumar
-Team Name: Albania
-K15 - Echoing responses
-2024-10-08
+Kyle Lee, Vedant Kothari, Suhana Kumar
+Team Name: K^3
+K16 - Take and Keep
+2024-10-14
 '''
 
 from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
 app.secret_key = 'conortoglory'
-T_name = "Albania"
-roster = ["Endrit Idrizi, Vedant Kothari, Suhana Kumar"]
+T_name = "K^3"
+roster = ["Kyle Lee, Vedant Kothari, Suhana Kumar"]
 
 @app.route('/')
 def primary():

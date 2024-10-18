@@ -1,4 +1,4 @@
-# Clyde 'Thluffy' Sinclair
+# Vedant Kothari
 # SoftDev
 # September 2024
 

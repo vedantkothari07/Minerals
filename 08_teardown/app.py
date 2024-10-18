@@ -1,22 +1,25 @@
-# your heading here
-
 '''
+Vedant Kothari
+# K^3 (Vedant Kothari, Suhana Kumar, Kyle Lee)
+# SoftDev
+# Learn more about what Flask is
+# 2024-09-21
+# time spent: 0.75 hours
+
 DISCO:
 <note any discoveries you made here... no matter how small!>
 
 QCC:
 0. I believe I have seen similar syntax in Java, where you call a function name (Flask in this case), and enter a parameter inside for what you want to run the function with. 
 1. A point of reference I have for the meaning of '/' is new line, where we use '/n'. I've also seen it in the terminal, where we use it to travel to different directories. 
-2. 
+2. What is the use of Flask?
 3. 
 4. 
 5. 
  ...
 
 INVESTIGATIVE APPROACH:
-<Your concise summary of how
- you and your team set about
- "illuminating the cave of ignorance" here...>
+We found points of reference to deduce the meaning of each term. 
 '''
 
 
