@@ -4,3 +4,8 @@ Team Name: K^3
 K16 - Flask Sessions
 2024-10-10
 '''
+
+NOTES:
+- Flask supports cookies using its own built-in mechanism
+- Users remain logged in until they log out by clicking the logout button
+- Usernames are stored through sessions. Once users login, the usernames are added to a dictionary, and as soon as they press logout, those usernames are removed from the same dictionary using the pop() method. 
