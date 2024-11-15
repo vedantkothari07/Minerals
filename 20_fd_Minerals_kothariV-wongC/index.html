@@ -55,7 +55,7 @@
 
 
 .product-feature-section {
-  background: #e6e6e6;
+  background: #ffffff;
   padding: 1rem;
 }
 
@@ -155,30 +155,150 @@
   }
 }
 
+.simple-subscription-form {
+  background: #ffffff;
+  color: #000000;
+  padding: 2rem;
+  border-radius: 0;
+}
+
+.simple-subscription-form .button {
+  margin-bottom: 0;
+  border-radius: 0 0 0 0;
+}
+
+
+.social {
+  margin-right: .25rem;
+}
+
+.social.facebook {
+  background-color: #3b5998;
+  color: #fefefe;
+}
+
+.social.facebook:hover, .social.facebook:focus {
+  background-color: #2f477a;
+  color: #fefefe;
+}
+
+.social.twitter {
+  background-color: #55acee;
+  color: #fefefe;
+}
+
+.social.twitter:hover, .social.twitter:focus {
+  background-color: #1a8fe8;
+  color: #fefefe;
+}
+
+.social.linkedin {
+  background-color: #007bb5;
+  color: #fefefe;
+}
+
+.social.linkedin:hover, .social.linkedin:focus {
+  background-color: #006291;
+  color: #fefefe;
+}
+
+.social.youtube {
+  background-color: #bb0000;
+  color: #fefefe;
+}
+
+.social.youtube:hover, .social.youtube:focus {
+  background-color: #960000;
+  color: #fefefe;
+}
+
+.social.instagram {
+  background-color: #125688;
+  color: #fefefe;
+}
+
+.social.instagram:hover, .social.instagram:focus {
+  background-color: #0e456d;
+  color: #fefefe;
+}
+
+.social.pinterest {
+  background-color: #cb2027;
+  color: #fefefe;
+}
+
+.social.pinterest:hover, .social.pinterest:focus {
+  background-color: #a21a1f;
+  color: #fefefe;
+}
+
+.social.google-plus {
+  background-color: #dd4b39;
+  color: #fefefe;
+}
+
+.social.google-plus:hover, .social.google-plus:focus {
+  background-color: #be3221;
+  color: #fefefe;
+}
+
+.social.github {
+  background-color: #000000;
+  color: #fefefe;
+}
+
+.social.github:hover, .social.github:focus {
+  background-color: black;
+  color: #fefefe;
+}
+
+.social.tumblr {
+  background-color: #32506d;
+  color: #fefefe;
+}
+
+.social.tumblr:hover, .social.tumblr:focus {
+  background-color: #284057;
+  color: #fefefe;
+}
+
+.social > .fa {
+  color: #fefefe;
+  margin-right: .25rem;
+}
+
+
+
 
 </style>
 
 <body>
-    <nav class="top-bar topbar-responsive">
-      <div class="top-bar-title">
-        <span data-responsive-toggle="topbar-responsive" data-hide-for="medium">
-          <button class="menu-icon" type="button" data-toggle></button>
-        </span>
-        <a class="topbar-responsive-logo" href="#"><strong>Features of Foundation</strong></a>
+  <nav class="scrollhide-nav">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <ul class="dropdown menu" data-dropdown-menu>
+          <li class="menu-text">Foundation How-To</li>
+          <li>
+            <ul class="menu horizontal">
+              <li><a href="#">One</a></li>
+              <li><a href="#">Two</a></li>
+              <li><a href="#">Three</a></li>
+            </ul>
+          </li>
+        </ul>
       </div>
-      <div id="topbar-responsive" class="topbar-responsive-links">
-        <div class="top-bar-right">
-          <ul class="menu simple vertical medium-horizontal">
-            <li><a href="#">Home</a></li>
-            <li><a href="features.html">Features</a></li>
-            <li>
-              <button type="button" class="button hollow topbar-responsive-button">Categories</button>
-            </li>
-          </ul>
-        </div>
+      <div class="top-bar-right">
+        <ul class="menu">
+          <li><input type="search" placeholder="Search"></li>
+          <li><button type="button" class="button">Search</button></li>
+        </ul>
       </div>
-    </nav>
+    </div>
+  </nav>
+  
+  
     <ul class="stats-list">
+      <h1>Feature: Stats List</h1>
       <li>
         23900 <span class="stats-list-label">Github Stars</span>
       </li>
@@ -190,42 +310,94 @@
       </li>
     </ul>
     <section class="product-feature-section">
+      <h1>Feature: Product Feature Section</h1>
       <div class="product-feature-section-outer">
         <h4 class="product-feature-section-headline">Key Features of Foundation<div></h4>
-
         <div class="product-feature-section-inner">
-
           <div class="product-feature-section-feature top-left">
             <i class="fa fa-shield" aria-hidden="true"></i>
         <div>
           <p class="feature-desc">Mobile First</p>
         </div>
       </div>
-
       <div class="product-feature-section-feature top-right">
         <i class="fa fa-heart" aria-hidden="true"></i>
         <div>
           <p class="feature-desc">Customizable</p>
         </div>
       </div>
-
       <div class="product-feature-section-feature bottom-left">
         <i class="fa fa-coffee" aria-hidden="true"></i>
         <div>
           <p class="feature-desc">Faster For Users</p>
         </div>
       </div>
-
       <div class="product-feature-section-feature bottom-right">
         <i class="fa fa-map-marker" aria-hidden="true"></i>
         <div>
           <p class="feature-desc">Navigable Website</p>
         </div>
       </div>
-
     </div>
   </div>
 </section>
+<h5>1. Mobile First</h5>
+<p>You can build pages catered for small devices first, and them increase complexity as devices get larger for a complete responsive design.</p>
+
+<h5>2. Customizable</h5>
+<p>You can customize the smallest of elements in sites like never before, such as the size of columns, colors, fonts, etc.</p>
+
+<h5>3. Faster For Users</h5>
+<p>Due to having a faster core, Foundation allows you to create animations wth relatively fast loading soeeds and a simpler, cleaner, and faster visual aesthetic.</p>
+
+<h5>4. Navigable</h5>
+<p>The website is easy to navigate and contains hundreds of building blocks for you to get started learning Foundation.</p>
+<div class="simple-subscription-form">
+  <form>
+    <h1>Feature: Subscription Form</h1>
+    <p>Receive updates and latest news direct from Team Minerals. Simply enter your email below :</p>
+    <div class="input-group">
+      <span class="input-group-label">
+        <i class="fa fa-envelope"></i>
+      </span>
+      <input class="input-group-field" type="email" placeholder="Email" required>
+      <button class="button">Sign up now</button>
+  </form>
+</div>
+<h1>Feature: Social Media Buttons</h1>
+<h4>Button as an Anchor tag</h4>
+<div class="clearfix"></div>
+<a href="#" class="button social facebook">
+  <i class="fa fa-facebook" aria-hidden="true"></i> Facebook 
+</a>
+<a href="#" class="button social twitter">
+  <i class="fa fa-twitter" aria-hidden="true"></i> Twitter 
+</a>
+<a href="#" class="button social linkedin">
+  <i class="fa fa-linkedin" aria-hidden="true"></i> Linkedin 
+</a>
+<a href="#" class="button social youtube">
+  <i class="fa fa-youtube" aria-hidden="true"></i> Youtube 
+</a>  
+<a href="#" class="button social instagram">
+  <i class="fa fa-instagram" aria-hidden="true"></i> Instagram 
+</a>
+<a href="#" class="button social pinterest">
+  <i class="fa fa-pinterest-p" aria-hidden="true"></i> Pinterest 
+</a>
+<a href="#" class="button social google-plus">
+  <i class="fa fa-google-plus" aria-hidden="true"></i> Google + 
+</a>
+<a href="#" class="button social github">
+  <i class="fa fa-github" aria-hidden="true"></i> Github 
+</a> 
+<a href="#" class="button social tumblr">
+  <i class="fa fa-tumblr" aria-hidden="true"></i> Tumblr 
+</a> 
+
+
+
+
 
 
 </body>
