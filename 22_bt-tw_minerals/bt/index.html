@@ -7,3 +7,132 @@
   2024-11-19
   Time Spent: 1
  -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewpoint" content="width=device.width, initial-scale=1.0">
+    <title> Best Soccer Players in the World </title>
+
+    <!-- BOOTSRAP CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; 
+        }
+        header {
+            background: linear-gradient(90deg, #007bff, #6c757d);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .feature-card {
+            transition: transform 0.2s;
+        }
+        .feature-card:hover {
+            transform: scale(1.05);
+        }
+     </style>
+</head>
+<body>
+    <header>
+        <h1>WELCOME</h1>
+        <p>Team Minerals [Vedant Kothari, Chloe Wong - Pd. 5] presents to you the three best soccer players in the world!</p>
+    </header>
+
+        <!-- Our features Section!-->
+        <section id="features" class="text-center my-5">
+            <h2>Best Players</h2>
+            <p class="text-muted">Here are the three best players in the world!</p>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card feature-card p-3 shadow-sm">
+                        <h3>Cole Palmer</h3>
+                        <p>A creative playmaker who plays like an old-school maverick.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card feature-card p-3 shadow-sm">
+                      <h3>Moises Caicedo</h3>
+                      <p>A tireless midfielder who puts his all into winning the game and making tackles.</p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card p-3 shadow-sm">
+                        <h3>Reece James</h3>
+                        <p>A brute in defense with lung-busting runs to contribute to the attack as well.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- grid System ex-->
+         <section id="grid" class="my-5">
+            <h2 class="text-center">Positions</h2>
+            <p class="text-muted text-center">These are the positions of each of the players.</p>
+            <div class="row text-center">
+                <div class="col-sm-4 bg-primary text-white p-4">Cole Palmer - RW/CAM</div>
+                <div class="col-sm-4 bg-secondary text-white p-4">Moises Caicedo - CDM</div>
+                <div class="col-sm-4 bg-success text-white p-4">Reece James - RB</div>
+            </div>
+         </section>
+
+         <!-- Forms section -->
+        <section id="forms" class="my-5">
+            <h2 class="text-center">Favorite Players</h2>
+            <p class="text-muted text-center">Who's your favorite soccer player in the world?</p>
+            <form class="row g-3">
+                <div class="col-md-6">
+                    <label for="inputName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="inputName" placeholder="Topher Mykolyk">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="inputEmail" placeholder="tmykolyk@stuy.edu">
+                </div>
+                <div class="col-12">
+                    <label for="inputMessage" class="form-label">Player</label>
+                    <textarea class="form-control" id="inputMessage" rows="3"></textarea>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </section>
+        
+        <!-- How To sectin-->
+        <section id="howto" class="my-5">
+            <h2 class="text-center">How to Use Bootstrap</h2>
+            <p class="text-muted text-center">Learn how to use Bootstrap quickly and easily!</p>
+            <ol>
+                <li>
+                    <strong>Include Bootstrap in Your Project:</strong> Start by adding Bootstrap's CSS and JavaScript files to your project. This can be done using a <a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank" class="text-decoration-none">CDN</a>, which allows you to load the necessary files directly from the web without downloading anything. Yay! We can do this on our lab computers!
+                </li>
+                <li>
+                    <strong>Use Containers for Layouts:</strong> Containers are used to structure your webpage and center your content. You can choose between a fixed-width container, which adjusts to the screen size but stays centered, or a fluid container that spans the full width of the screen. You can learn more about containers in the <a href="https://getbootstrap.com/docs/5.3/layout/containers/" target="_blank" class="text-decoration-none">Bootstrap Documentation</a>.
+                </li>
+                <li>
+                    <strong>Create Layouts with the Grid System:</strong> Bootstrap's grid system allows you to divide your page into rows and columns, making it responsive for all screen sizes. Use rows to group content and columns to define how space is divided across the row. Read more about grids in the <a href="https://getbootstrap.com/docs/5.3/layout/grid/" target="_blank" class="text-decoration-none">official grid documentation</a>.
+                </li>
+                <li>
+                    <strong>Utilize Pre-Built Components:</strong> Bootstrap includes ready-made elements (IK great!) such as buttons, navbars, forms, and modals. These components are styled and functional out of the box, which makes it easy to add them to your project. Check out the <a href="https://getbootstrap.com/docs/5.3/components/alerts/" target="_blank" class="text-decoration-none">components section</a> in the documentation for more examples.
+                </li>
+                <li>
+                    <strong>Customize with Utility Classes:</strong> Bootstrap provides classes to quickly adjust spacing, alignment, colors, and more. These utility classes save you time and eliminate the need for custom CSS in many cases. Explore the available <a href="https://getbootstrap.com/docs/5.3/utilities/" target="_blank" class="text-decoration-none">utility classes here</a>.
+                </li>
+            </ol>
+        </section>
+            
+        
+    </main>
+
+    <!--Footer-->
+    <footer class="text-center bg-light py-3">
+        <p>&copy; 2024 TopherEvilInc. Don't steal or you will face terrible consequences.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</body>
+</html>
