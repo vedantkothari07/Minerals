@@ -1,0 +1,15 @@
+Team Marmoush :: Vedant Kothari, Ziyad Hamed
+SoftDev pd5
+K27 - Basic functions in JavaScript
+2025-01-06m
+
+DISCO:
+- JS and Scheme do the same functions except with slightly different syntax
+- Scheme used 'cond' for conditionals, while JS used 'if-else'
+
+QCC:
+- Out of JS and Scheme, which one is more efficient in terms of carrying out the functions?
+- Out of JS and Scheme, which one is more popular amongst devos?
+
+Notes:
+- You can copy past the test calls from the file directly into the console if you want additional verification. 
