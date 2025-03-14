@@ -1,0 +1,25 @@
+JAVA: Aidan Wong, Vedant Kothari
+SoftDev
+K35: Now Again for the First Time
+2024-03-12
+Time Spent: 2
+
+DISCO:
+- Works better as VSCode extension vs on GitHub
+- Works better with some sample code in place to use as base
+- No buttons to copy chat logs
+- AI likes splitting everything into different files, even if it dosen't make the most sense
+- Good at revising small amounts of code at a time (1-6 lines)
+- More specific prompts lead to better results
+
+Q/C/C:
+some areas of interest...
+q0: How many tries did it take to "get it right?"
+- 2 tries (1 codebase wipe)
+
+q1: Did you catch any errors? If so, how did you notice, and what did you do?
+- Errors in what I wanted, fixed by asking it to do the task again
+
+q2: How similar or different is the bot's output to that of your past self / old team?
+- Some files were similar, but it split up code (Flask vs database vs init) in different ways (more file structured differently)
+- Used more Jinja inheritance (extends base in HTML files)

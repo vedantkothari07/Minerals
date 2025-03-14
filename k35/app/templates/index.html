@@ -1,0 +1,26 @@
+<!--
+JAVA: Aidan Wong, Vedant Kothari
+SoftDev
+K35: Now Again for the First Time
+2024-03-12
+Time Spent: 2
+-->
+
+{% extends "base.html" %}
+{% block content %}
+    <h2>Welcome, {{ session['username'] }}</h2>
+    <h3>Your Stories</h3>
+    <ul>
+        {% for story in user_stories %}
+            <li><a href="{{ url_for('view_story', story_title=story) }}">{{ story }}</a></li>
+        {% endfor %}
+    </ul>
+    <h3>Available Stories</h3>
+    <ul>
+        {% for story in available_stories %}
+            <li><a href="{{ url_for('contribute', story_title=story) }}">{{ story }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('create_story') }}">Create a new story</a>
+    <a href="{{ url_for('logout') }}">Log out</a>
+{% endblock %}

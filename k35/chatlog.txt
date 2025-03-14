@@ -1,0 +1,1083 @@
+JAVA: Aidan Wong, Vedant Kothari
+SoftDev
+K35: Now Again for the First Time
+2024-03-12
+Time Spent: 2
+
+Interaction 1
+
+Create a website without CSS and without importing any new modules than flask and os. Below are the details of what it should be
+
+Scenario One: Your team has been contracted to create a collaborative storytelling game/website, with the following features:
+
+Users will have to register to use the site. Logged-in users can either start a new story or add to an existing story. When adding to a story, Users are shown only the latest update to the story, not the whole thing. A user can then add some amount of text to the story. Once a user has added to a story, they cannot add to it again. When creating a new story, Users get to start with any amount of text and give the story a title. Logged in users will be able to read any story they have contributed to on their homepage (the landing page after login).
+
+Sure, here's a proposed directory structure for a Flask web application:
+(Provides directory structure with code for each file)
+
+------------------------------------------------------------------------------------------------
+
+Interaction 2
+
+User should not be initially logged in
+
+To implement the collaborative storytelling game/website as described, we need to make some modifications to the existing code. Here are the changes and additions:
+
+Ensure users are not initially logged in.
+Allow users to see only the latest update to a story when contributing.
+Prevent users from contributing to the same story more than once.
+Display stories that users have contributed to on their homepage.
+Here is the updated __init__.py file:
+'''
+JAVA: Aidan Wong, Vedant Kothari
+SoftDev
+K35: Now Again for the First Time
+2024-03-12
+Time Spent:
+'''
+
+from flask import Flask, request, redirect, url_for, render_template, session
+import os
+
+app = Flask(__name__)
+app.secret_key = os.urandom(32)
+
+# In-memory data structures for user and story management
+users = {}
+stories = {}
+user_contributions = {}
+
+@app.route('/')
+def landing_page():
+    if 'username' in session:
+        user_stories = [title for title, story in stories.items() if session['username'] in story['contributors']]
+        return render_template('index.html', stories=user_stories)
+    return redirect(url_for('login'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username not in users:
+            users[username] = password
+            return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if users.get(username) == password:
+            session['username'] = username
+            return redirect(url_for('landing_page'))
+    return render_template('login.html')
+
+@app.route('/create_story', methods=['GET', 'POST'])
+def create_story():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        stories[title] = {'content': content, 'contributions': [], 'contributors': [session['username']]}
+        user_contributions[session['username']] = user_contributions.get(session['username'], []) + [title]
+        return redirect(url_for('landing_page'))
+    return render_template('create_story.html')
+
+@app.route('/contribute/<story_title>', methods=['GET', 'POST'])
+def contribute(story_title):
+    if story_title not in stories or session['username'] in stories[story_title]['contributors']:
+        return redirect(url_for('landing_page'))
+    
+    if request.method == 'POST':
+        contribution = request.form['contribution']
+        if story_title in stories:
+            stories[story_title]['contributions'].append(contribution)
+            stories[story_title]['contributors'].append(session['username'])
+            user_contributions[session['username']] = user_contributions.get(session['username'], []) + [story_title]
+        return redirect(url_for('landing_page'))
+    
+    latest_update = stories[story_title]['contributions'][-1] if stories[story_title]['contributions'] else stories[story_title]['content']
+    return render_template('contribute.html', story_title=story_title, latest_update=latest_update)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+Additionally, here are the templates:
+
+base.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Collaborative Storytelling</title>
+</head>
+<body>
+    <h1>Collaborative Storytelling</h1>
+    {% block content %}{% endblock %}
+</body>
+</html>
+
+index.html
+{% extends "base.html" %}
+{% block content %}
+    <h2>Welcome, {{ session['username'] }}</h2>
+    <h3>Your Stories</h3>
+    <ul>
+        {% for story in stories %}
+            <li>{{ story }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('create_story') }}">Create a new story</a>
+{% endblock %}
+
+register.html
+{% extends "base.html" %}
+{% block content %}
+    <h2>Register</h2>
+    <form method="post">
+        Username: <input type="text" name="username"><br>
+        Password: <input type="password" name="password"><br>
+        <input type="submit" value="Register">
+    </form>
+{% endblock %}
+
+login.html
+{% extends "base.html" %}
+{% block content %}
+    <h2>Login</h2>
+    <form method="post">
+        Username: <input type="text" name="username"><br>
+        Password: <input type="password" name="password"><br>
+        <input type="submit" value="Login">
+    </form>
+{% endblock %}
+
+create_story.html
+{% extends "base.html" %}
+{% block content %}
+    <h2>Create a New Story</h2>
+    <form method="post">
+        Title: <input type="text" name="title"><br>
+        Content: <textarea name="content"></textarea><br>
+        <input type="submit" value="Create">
+    </form>
+{% endblock %}
+
+contribute.html
+{% extends "base.html" %}
+{% block content %}
+    <h2>Contribute to "{{ story_title }}"</h2>
+    <p>Latest update: {{ latest_update }}</p>
+    <form method="post">
+        Contribution: <textarea name="contribution"></textarea><br>
+        <input type="submit" value="Contribute">
+    </form>
+{% endblock %}
+
+These changes and additions should meet the requirements for the collaborative storytelling game/website.
+
+------------------------------------------------------------------------------------------------
+
+Interaction 3:
+
+Create log in functionality, The initial landing page should prompt for logging in or signing up
+
+User information should be stored in a sqlite3 database (username and password)
+
+To implement the login functionality and store user information in a SQLite3 database, we need to make several changes to the existing code. Here are the steps:
+
+Set up the SQLite3 database for storing user information.
+Modify the registration and login routes to interact with the database.
+Ensure the initial landing page prompts for logging in or signing up.
+Here is the updated __init__.py file:
+'''
+JAVA: Aidan Wong, Vedant Kothari
+SoftDev
+K35: Now Again for the First Time
+2024-03-12
+Time Spent:
+'''
+
+from flask import Flask, request, redirect, url_for, render_template, session
+import os
+import sqlite3
+
+app = Flask(__name__)
+app.secret_key = os.urandom(32)
+
+# Database setup
+def init_db():
+    with sqlite3.connect('database.db') as conn:
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS users (
+                        username TEXT PRIMARY KEY,
+                        password TEXT NOT NULL)''')
+        conn.commit()
+
+init_db()
+
+# In-memory data structures for story management
+stories = {}
+
+@app.route('/')
+def landing_page():
+    if 'username' in session:
+        return render_template('index.html', stories=stories)
+    return redirect(url_for('login'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('SELECT * FROM users WHERE username = ?', (username,))
+            if c.fetchone() is None:
+                c.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+                conn.commit()
+                return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
+            if c.fetchone():
+                session['username'] = username
+                return redirect(url_for('landing_page'))
+    return render_template('login.html')
+
+@app.route('/create_story', methods=['GET', 'POST'])
+def create_story():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        stories[title] = {'content': content, 'contributions': []}
+        return redirect(url_for('landing_page'))
+    return render_template('create_story.html')
+
+@app.route('/contribute/<story_title>', methods=['GET', 'POST'])
+def contribute(story_title):
+    if request.method == 'POST':
+        contribution = request.form['contribution']
+        if story_title in stories:
+            stories[story_title]['contributions'].append(contribution)
+        return redirect(url_for('landing_page'))
+    return render_template('contribute.html', story=stories[story_title])
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+* Also reprovided same template code (excluded because redundant)
+
+------------------------------------------------------------------------------------------------
+
+Interaction 4
+
+The your stories category should only show stories that the user has contributed to (use sqlite3 databases to achieve this effect)
+
+Make it so you can click each story and it will display its contents
+
+To achieve the desired functionality, we need to make the following changes:
+
+Modify the database schema to store stories and user contributions.
+Update the create_story and contribute routes to interact with the database.
+Update the landing_page to show only the stories the user has contributed to.
+Add a route to display the contents of a story when clicked.
+Here is the updated __init__.py file:
+
+'''
+JAVA: Aidan Wong, Vedant Kothari
+SoftDev
+K35: Now Again for the First Time
+2024-03-12
+Time Spent:
+'''
+
+from flask import Flask, request, redirect, url_for, render_template, session
+import os
+import sqlite3
+
+app = Flask(__name__)
+app.secret_key = os.urandom(32)
+
+# Database setup
+def init_db():
+    with sqlite3.connect('database.db') as conn:
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS users (
+                        username TEXT PRIMARY KEY,
+                        password TEXT NOT NULL)''')
+        c.execute('''CREATE TABLE IF NOT EXISTS stories (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        title TEXT NOT NULL,
+                        content TEXT NOT NULL,
+                        author TEXT NOT NULL)''')
+        c.execute('''CREATE TABLE IF NOT EXISTS contributions (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        story_id INTEGER NOT NULL,
+                        username TEXT NOT NULL,
+                        contribution TEXT NOT NULL,
+                        FOREIGN KEY(story_id) REFERENCES stories(id),
+                        FOREIGN KEY(username) REFERENCES users(username))''')
+        conn.commit()
+
+init_db()
+
+@app.route('/')
+def landing_page():
+    if 'username' in session:
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('''SELECT DISTINCT stories.title 
+                         FROM stories 
+                         JOIN contributions ON stories.id = contributions.story_id 
+                         WHERE contributions.username = ?''', (session['username'],))
+            user_stories = [row[0] for row in c.fetchall()]
+        return render_template('index.html', stories=user_stories)
+    return redirect(url_for('login'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('SELECT * FROM users WHERE username = ?', (username,))
+            if c.fetchone() is None:
+                c.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+                conn.commit()
+                return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
+            if c.fetchone():
+                session['username'] = username
+                return redirect(url_for('landing_page'))
+    return render_template('login.html')
+
+@app.route('/create_story', methods=['GET', 'POST'])
+def create_story():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('INSERT INTO stories (title, content, author) VALUES (?, ?, ?)', (title, content, session['username']))
+            story_id = c.lastrowid
+            c.execute('INSERT INTO contributions (story_id, username, contribution) VALUES (?, ?, ?)', (story_id, session['username'], content))
+            conn.commit()
+        return redirect(url_for('landing_page'))
+    return render_template('create_story.html')
+
+@app.route('/contribute/<story_title>', methods=['GET', 'POST'])
+def contribute(story_title):
+    with sqlite3.connect('database.db') as conn:
+        c = conn.cursor()
+        c.execute('SELECT id, content FROM stories WHERE title = ?', (story_title,))
+        story = c.fetchone()
+        if not story:
+            return redirect(url_for('landing_page'))
+        story_id, story_content = story
+        c.execute('SELECT * FROM contributions WHERE story_id = ? AND username = ?', (story_id, session['username']))
+        if c.fetchone():
+            return redirect(url_for('landing_page'))
+        latest_update = story_content
+        c.execute('SELECT contribution FROM contributions WHERE story_id = ? ORDER BY id DESC LIMIT 1', (story_id,))
+        latest_contribution = c.fetchone()
+        if latest_contribution:
+            latest_update = latest_contribution[0]
+
+    if request.method == 'POST':
+        contribution = request.form['contribution']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('INSERT INTO contributions (story_id, username, contribution) VALUES (?, ?, ?)', (story_id, session['username'], contribution))
+            conn.commit()
+        return redirect(url_for('landing_page'))
+
+    return render_template('contribute.html', story_title=story_title, latest_update=latest_update)
+
+@app.route('/story/<story_title>')
+def view_story(story_title):
+    with sqlite3.connect('database.db') as conn:
+        c = conn.cursor()
+        c.execute('SELECT content FROM stories WHERE title = ?', (story_title,))
+        story = c.fetchone()
+        if not story:
+            return redirect(url_for('landing_page'))
+        story_content = story[0]
+        c.execute('SELECT contribution FROM contributions WHERE story_id = (SELECT id FROM stories WHERE title = ?) ORDER BY id', (story_title,))
+        contributions = [row[0] for row in c.fetchall()]
+    return render_template('view_story.html', story_title=story_title, story_content=story_content, contributions=contributions)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+Additionally, here are the updated templates:
+
+index.html
+{% extends "base.html" %}
+{% block content %}
+    <h2>Welcome, {{ session['username'] }}</h2>
+    <h3>Your Stories</h3>
+    <ul>
+        {% for story in stories %}
+            <li><a href="{{ url_for('view_story', story_title=story) }}">{{ story }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('create_story') }}">Create a new story</a>
+{% endblock %}
+
+view_story.html
+{% extends "base.html" %}
+{% block content %}
+    <h2>{{ story_title }}</h2>
+    <p>{{ story_content }}</p>
+    <h3>Contributions</h3>
+    <ul>
+        {% for contribution in contributions %}
+            <li>{{ contribution }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+
+These changes should meet the requirements for the collaborative storytelling game/website with user authentication, SQLite3 database integration, and the ability to view and contribute to stories.
+
+------------------------------------------------------------------------------------------------
+
+Interaction 5
+
+Users should see stories they have not contributed to under the "your stories", and upon clicking, they are shown the latest update of the story and prompted to add on. After they have added on, the story will be in the your stories category and can be fully viewed (instead of just the latest addition)
+
+To achieve the desired functionality, we need to make the following changes:
+
+Modify the database schema to store stories and user contributions.
+Update the create_story and contribute routes to interact with the database.
+Update the landing_page to show only the stories the user has contributed to.
+Add a route to display the contents of a story when clicked.
+Here is the updated __init__.py file:
+'''
+JAVA: Aidan Wong, Vedant Kothari
+SoftDev
+K35: Now Again for the First Time
+2024-03-12
+Time Spent:
+'''
+
+from flask import Flask, request, redirect, url_for, render_template, session
+import os
+import sqlite3
+
+app = Flask(__name__)
+app.secret_key = os.urandom(32)
+
+# Database setup
+def init_db():
+    with sqlite3.connect('database.db') as conn:
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS users (
+                        username TEXT PRIMARY KEY,
+                        password TEXT NOT NULL)''')
+        c.execute('''CREATE TABLE IF NOT EXISTS stories (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        title TEXT NOT NULL,
+                        content TEXT NOT NULL,
+                        author TEXT NOT NULL)''')
+        c.execute('''CREATE TABLE IF NOT EXISTS contributions (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        story_id INTEGER NOT NULL,
+                        username TEXT NOT NULL,
+                        contribution TEXT NOT NULL,
+                        FOREIGN KEY(story_id) REFERENCES stories(id),
+                        FOREIGN KEY(username) REFERENCES users(username))''')
+        conn.commit()
+
+init_db()
+
+@app.route('/')
+def landing_page():
+    if 'username' in session:
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('''SELECT DISTINCT stories.title 
+                         FROM stories 
+                         JOIN contributions ON stories.id = contributions.story_id 
+                         WHERE contributions.username = ?''', (session['username'],))
+            user_stories = [row[0] for row in c.fetchall()]
+
+            c.execute('''SELECT title FROM stories 
+                         WHERE id NOT IN (SELECT story_id FROM contributions WHERE username = ?)''', (session['username'],))
+            available_stories = [row[0] for row in c.fetchall()]
+
+        return render_template('index.html', user_stories=user_stories, available_stories=available_stories)
+    return redirect(url_for('login'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('SELECT * FROM users WHERE username = ?', (username,))
+            if c.fetchone() is None:
+                c.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+                conn.commit()
+                return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
+            if c.fetchone():
+                session['username'] = username
+                return redirect(url_for('landing_page'))
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
+@app.route('/create_story', methods=['GET', 'POST'])
+def create_story():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('INSERT INTO stories (title, content, author) VALUES (?, ?, ?)', (title, content, session['username']))
+            story_id = c.lastrowid
+            c.execute('INSERT INTO contributions (story_id, username, contribution) VALUES (?, ?, ?)', (story_id, session['username'], content))
+            conn.commit()
+        return redirect(url_for('landing_page'))
+    return render_template('create_story.html')
+
+@app.route('/contribute/<story_title>', methods=['GET', 'POST'])
+def contribute(story_title):
+    with sqlite3.connect('database.db') as conn:
+        c = conn.cursor()
+        c.execute('SELECT id, content FROM stories WHERE title = ?', (story_title,))
+        story = c.fetchone()
+        if not story:
+            return redirect(url_for('landing_page'))
+        story_id, story_content = story
+        c.execute('SELECT * FROM contributions WHERE story_id = ? AND username = ?', (story_id, session['username']))
+        if c.fetchone():
+            return redirect(url_for('landing_page'))
+        latest_update = story_content
+        c.execute('SELECT contribution FROM contributions WHERE story_id = ? ORDER BY id DESC LIMIT 1', (story_id,))
+        latest_contribution = c.fetchone()
+        if latest_contribution:
+            latest_update = latest_contribution[0]
+
+    if request.method == 'POST':
+        contribution = request.form['contribution']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('INSERT INTO contributions (story_id, username, contribution) VALUES (?, ?, ?)', (story_id, session['username'], contribution))
+            conn.commit()
+        return redirect(url_for('landing_page'))
+
+    return render_template('contribute.html', story_title=story_title, latest_update=latest_update)
+
+@app.route('/story/<story_title>')
+def view_story(story_title):
+    with sqlite3.connect('database.db') as conn:
+        c = conn.cursor()
+        c.execute('SELECT content FROM stories WHERE title = ?', (story_title,))
+        story = c.fetchone()
+        if not story:
+            return redirect(url_for('landing_page'))
+        story_content = story[0]
+        c.execute('SELECT contribution FROM contributions WHERE story_id = (SELECT id FROM stories WHERE title = ?) ORDER BY id', (story_title,))
+        contributions = [row[0] for row in c.fetchall()]
+    return render_template('view_story.html', story_title=story_title, story_content=story_content, contributions=contributions)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+Additionally, here are the updated templates:
+
+index.html
+{% extends "base.html" %}
+{% block content %}
+    <h2>Welcome, {{ session['username'] }}</h2>
+    <h3>Your Stories</h3>
+    <ul>
+        {% for story in user_stories %}
+            <li><a href="{{ url_for('view_story', story_title=story) }}">{{ story }}</a></li>
+        {% endfor %}
+    </ul>
+    <h3>Available Stories</h3>
+    <ul>
+        {% for story in available_stories %}
+            <li><a href="{{ url_for('contribute', story_title=story) }}">{{ story }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('create_story') }}">Create a new story</a>
+{% endblock %}
+1 vulnerability
+contribute.html
+{% extends "base.html" %}
+{% block content %}
+    <h2>Contribute to "{{ story_title }}"</h2>
+    <p>Latest update: {{ latest_update }}</p>
+    <form method="post">
+        Contribution: <textarea name="contribution"></textarea><br>
+        <input type="submit" value="Contribute">
+    </form>
+{% endblock %}
+view_story.html
+{% extends "base.html" %}
+{% block content %}
+    <h2>{{ story_title }}</h2>
+    <p>{{ story_content }}</p>
+    <h3>Contributions</h3>
+    <ul>
+        {% for contribution in contributions %}
+            <li>{{ contribution }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+These changes should meet the requirements for the collaborative storytelling game/website with user authentication, SQLite3 database integration, and the ability to view and contribute to stories.
+
+------------------------------------------------------------------------------------------------
+
+Interaction 6
+
+The story itself should be strung together also (not just adding another bullet point); keep the bullet point but also add it to the full story for a paragraph form
+
+o implement the requested functionality, we need to make the following changes:
+
+Modify the landing_page route to show stories the user has not contributed to under "Available Stories" and stories they have contributed to under "Your Stories".
+Update the contribute route to allow users to add to stories they have not contributed to yet.
+Update the view_story route to show the full story if the user has contributed to it.
+Ensure that contributions are added to the full story content.
+Here is the updated __init__.py file:
+'''
+JAVA: Aidan Wong, Vedant Kothari
+SoftDev
+K35: Now Again for the First Time
+2024-03-12
+Time Spent:
+'''
+
+from flask import Flask, request, redirect, url_for, render_template, session
+import os
+import sqlite3
+
+app = Flask(__name__)
+app.secret_key = os.urandom(32)
+
+# Database setup
+def init_db():
+    with sqlite3.connect('database.db') as conn:
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS users (
+                        username TEXT PRIMARY KEY,
+                        password TEXT NOT NULL)''')
+        c.execute('''CREATE TABLE IF NOT EXISTS stories (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        title TEXT NOT NULL,
+                        content TEXT NOT NULL,
+                        author TEXT NOT NULL)''')
+        c.execute('''CREATE TABLE IF NOT EXISTS contributions (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        story_id INTEGER NOT NULL,
+                        username TEXT NOT NULL,
+                        contribution TEXT NOT NULL,
+                        FOREIGN KEY(story_id) REFERENCES stories(id),
+                        FOREIGN KEY(username) REFERENCES users(username))''')
+        conn.commit()
+
+init_db()
+
+@app.route('/')
+def landing_page():
+    if 'username' in session:
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('''SELECT DISTINCT stories.title 
+                         FROM stories 
+                         JOIN contributions ON stories.id = contributions.story_id 
+                         WHERE contributions.username = ?''', (session['username'],))
+            user_stories = [row[0] for row in c.fetchall()]
+
+            c.execute('''SELECT title FROM stories 
+                         WHERE id NOT IN (SELECT story_id FROM contributions WHERE username = ?)''', (session['username'],))
+            available_stories = [row[0] for row in c.fetchall()]
+
+        return render_template('index.html', user_stories=user_stories, available_stories=available_stories)
+    return redirect(url_for('login'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('SELECT * FROM users WHERE username = ?', (username,))
+            if c.fetchone() is None:
+                c.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+                conn.commit()
+                return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
+            if c.fetchone():
+                session['username'] = username
+                return redirect(url_for('landing_page'))
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
+@app.route('/create_story', methods=['GET', 'POST'])
+def create_story():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('INSERT INTO stories (title, content, author) VALUES (?, ?, ?)', (title, content, session['username']))
+            story_id = c.lastrowid
+            c.execute('INSERT INTO contributions (story_id, username, contribution) VALUES (?, ?, ?)', (story_id, session['username'], content))
+            conn.commit()
+        return redirect(url_for('landing_page'))
+    return render_template('create_story.html')
+
+@app.route('/contribute/<story_title>', methods=['GET', 'POST'])
+def contribute(story_title):
+    with sqlite3.connect('database.db') as conn:
+        c = conn.cursor()
+        c.execute('SELECT id, content FROM stories WHERE title = ?', (story_title,))
+        story = c.fetchone()
+        if not story:
+            return redirect(url_for('landing_page'))
+        story_id, story_content = story
+        c.execute('SELECT * FROM contributions WHERE story_id = ? AND username = ?', (story_id, session['username']))
+        if c.fetchone():
+            return redirect(url_for('landing_page'))
+        latest_update = story_content
+        c.execute('SELECT contribution FROM contributions WHERE story_id = ? ORDER BY id DESC LIMIT 1', (story_id,))
+        latest_contribution = c.fetchone()
+        if latest_contribution:
+            latest_update = latest_contribution[0]
+
+    if request.method == 'POST':
+        contribution = request.form['contribution']
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('INSERT INTO contributions (story_id, username, contribution) VALUES (?, ?, ?)', (story_id, session['username'], contribution))
+            c.execute('UPDATE stories SET content = content || " " || ? WHERE id = ?', (contribution, story_id))
+            conn.commit()
+        return redirect(url_for('landing_page'))
+
+    return render_template('contribute.html', story_title=story_title, latest_update=latest_update)
+
+@app.route('/story/<story_title>')
+def view_story(story_title):
+    with sqlite3.connect('database.db') as conn:
+        c = conn.cursor()
+        c.execute('SELECT content FROM stories WHERE title = ?', (story_title,))
+        story = c.fetchone()
+        if not story:
+            return redirect(url_for('landing_page'))
+        story_content = story[0]
+        c.execute('SELECT contribution FROM contributions WHERE story_id = (SELECT id FROM stories WHERE title = ?) ORDER BY id', (story_title,))
+        contributions = [row[0] for row in c.fetchall()]
+    return render_template('view_story.html', story_title=story_title, story_content=story_content, contributions=contributions)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+Additionally, here are the updated templates:
+
+index.html
+(stayed the same)
+1 vulnerability
+contribute.html
+(stayed the same)
+view_story.html
+(stayed the same)
+These changes should meet the requirements for the collaborative storytelling game/website with user authentication, SQLite3 database integration, and the ability to view and contribute to stories.
+
+------------------------------------------------------------------------------------------------
+
+Interaction 7
+
+(Highlighted line of code displaying story content): This should include all contributions and add punctuation if not at the end of each contribution
+
+(Did the action)
+
+------------------------------------------------------------------------------------------------
+
+Interaction 8
+
+Add CSS for my website make it look nice put it in the static css folder to work with flask
+
+Step 1: Add a CSS file
+
+    Create a basic CSS file with some starter styles. Here is an example of some basic CSS to improve the appearance:
+
+CSS
+
+/* static/css/styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+Public code references from 3 repositories
+
+    Save the CSS file as styles.css.
+
+Step 2: Place CSS file in the static/css folder
+
+    Place the newly created styles.css in the static/css folder. You should have the file path as static/css/styles.css.
+
+    Update your HTML templates to include the new CSS file. Here is an example of how to include the CSS file in the <head> section of your HTML template:
+
+HTML
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Website Title</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <!-- Your content goes here -->
+    </div>
+    <footer>
+        &copy; 2025 Your Website Name
+    </footer>
+</body>
+</html>
+
+Public code references from 6 repositories
+
+Follow-up Steps
+
+    Verify that the CSS file is being properly referenced and loaded in the HTML templates.
+    Test the website to see if the styles are showing up as expected.
+
+------------------------------------------------------------------------------------------------
+
+Interaction 9
+
+Center my login and registration pages and make it look nice
+
+To center your login and registration pages and make them look nice, you can add some CSS to your styles.css file and update your base.html to include the CSS file. Here are the steps:
+Step 1: Update base.html to include the CSS file
+
+Add the link to your CSS file in the <head> section of base.html:
+HTML
+
+<head>
+    <title>Collaborative Storytelling</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+Public code references from 1 repository
+
+Step 2: Add CSS to center the forms
+
+Create or update the static/css/styles.css file with the following CSS to center the login and registration forms and make them look nice:
+CSS
+
+/* static/css/styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="submit"],
+button {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"],
+button {
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover,
+button:hover {
+    background-color: #555;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+Public code references from 3 repositories
+
+Step 3: Update the HTML templates
+
+Wrap the form content in a div with the class container in both login.html and register.html:
+login.html
+HTML
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Login</h2>
+    <form method="post">
+        Username: <input type="text" name="username"><br>
+        Password: <input type="password" name="password"><br>
+        <input type="submit" value="Login">
+    </form>
+    <br>
+    <a href="/register"><button type="button">Register</button></a>
+</div>
+{% endblock %}
+
+Public code references from 1 repository
+
+register.html
+HTML
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Register</h2>
+    <form method="post">
+        Username: <input type="text" name="username"><br>
+        Password: <input type="password" name="password"><br>
+        <input type="submit" value="Register">
+    </form>
+    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+</div>
+{% endblock %}
+
+Public code references from 5 repositories
+
+This will center the forms and give them a nicer appearance. Make sure to place the styles.css in the static/css folder.
+
+------------------------------------------------------------------------------------------------
+
+Interaction 10
+
+Make my view story  create story contribute and index page that shows the stories and stuff look nicer and adhere to the styling of every other page
+

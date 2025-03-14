@@ -1,0 +1,21 @@
+<!--
+JAVA: Aidan Wong, Vedant Kothari
+SoftDev
+K35: Now Again for the First Time
+2024-03-12
+Time Spent: 2
+-->
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Login</h2>
+    <form method="post">
+        Username: <input type="text" name="username"><br>
+        Password: <input type="password" name="password"><br>
+        <input type="submit" value="Login">
+    </form>
+    <br>
+    <a href="/register"><button type="button">Register</button></a>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+<!--
+JAVA: Aidan Wong, Vedant Kothari
+SoftDev
+K35: Now Again for the First Time
+2024-03-12
+Time Spent: 2
+-->
+
+{% extends "base.html" %}
+{% block content %}
+    <h2>Contribute to "{{ story_title }}"</h2>
+    <p>Latest update: {{ latest_update }}</p>
+    <form method="post">
+        Contribution: <textarea name="contribution"></textarea><br>
+        <input type="submit" value="Contribute">
+    </form>
+    <a href="{{ url_for('landing_page') }}" class="btn btn-primary">Back to Dashboard</a>
+{% endblock %}
